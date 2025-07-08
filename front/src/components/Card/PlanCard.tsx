@@ -3,9 +3,11 @@ import styles from './PlanCard.module.css'
 
 interface PlanCardProps {
   plan: Plan
+  onSubscribe: (planId: number) => void
+  active?: boolean
 }
 
-export function PlanCard({ plan }: PlanCardProps) {
+export function PlanCard({ plan, onSubscribe, active = false }: PlanCardProps) {
   const main = plan.description.split('/')[0].trim()
 
   return (
@@ -28,12 +30,13 @@ export function PlanCard({ plan }: PlanCardProps) {
           <span className={styles.perMonth}>/mês</span>
         </div>
       </div>
-      {/* 
-      <div className={styles.content}>
-        <p className={styles.storage}>Armazenamento: {plan.gigabytesStorage} GB</p>
-        <p className={styles.price}>R$ {plan.price}</p>
-      </div>
-      */}
+      <button
+          className={styles.button}
+          onClick={() => onSubscribe(plan.id)}
+          disabled={active}
+        >
+          {active ? 'Plano Ativo' : 'Assinar'}
+        </button>
       
     </div>
   )
