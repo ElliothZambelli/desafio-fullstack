@@ -1,0 +1,16 @@
+.pageWrapper {
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.paymentInfo {
+  font-size: 1.2rem;
+  background-color: #f3f3f3;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
