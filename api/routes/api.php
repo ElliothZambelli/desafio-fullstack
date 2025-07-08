@@ -3,6 +3,8 @@
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +27,17 @@ Route::get('/', function () {
 
 Route::apiResource('plans', PlanController::class, ['only' => 'index']);
 
-Route::apiSingleton('user', UserController::class, ['only' => 'show']);
+Route::get('/user', [UserController::class, 'show']);
+
+//Contratos
+Route::post('/contracts', [ContractController::class, 'store']);
+Route::get('/contracts/active', [ContractController::class, 'showActive']);
+Route::get('/contracts', [ContractController::class, 'index']);
+
+//Pagamentos
+Route::get('/payments', [PaymentController::class, 'index']);
+Route::post('/payments', [PaymentController::class, 'store']);
+
+
+
+

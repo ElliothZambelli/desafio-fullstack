@@ -10,10 +10,14 @@ export function Home() {
   }
 
   return (
-    <div className={styles.container}>
-      {plans.map(plan => (
-        <PlanCard key={plan.id} plan={plan} />
-      ))}
+    <div className={styles.pageWrapper}>
+      <div className={styles.cardArea}>
+        <div className={styles.planGrid}>
+          {plans.map(plan => (
+            <PlanCard key={plan.id} plan={plan} />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

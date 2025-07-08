@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
-
-    /**
-     * Display the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
+    public function show(): JsonResponse
     {
-        return User::find(1);
+        $user = User::select('id', 'name', 'email')->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        return response()->json($user);
     }
 }

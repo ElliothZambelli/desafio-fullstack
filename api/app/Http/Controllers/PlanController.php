@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use Illuminate\Http\JsonResponse;
 
 class PlanController extends Controller
 {
-    /**
-     * Display a listing of the plans.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        return Plan::all();
+        $plans = Plan::where('active', true)->get();
+        return response()->json($plans);
     }
 }
