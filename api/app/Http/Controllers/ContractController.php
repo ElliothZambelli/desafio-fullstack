@@ -8,6 +8,9 @@ use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class ContractController extends Controller
 {
@@ -32,32 +35,44 @@ class ContractController extends Controller
         $plan = Plan::findOrFail($request->plan_id);
         $now = Carbon::now();
 
-        // Verifica contrato ativo
         $activeContract = $user->activeContract;
 
         $credit = 0;
 
         if ($activeContract) {
-            // Encerrar contrato atual
-            $contract = $activeContract;
-            $contract->is_active = false;
-            $contract->ended_at = $now;
-            $contract->save();
+            // Desativa contrato anterior
+            $activeContract->is_active = false;
+            $activeContract->ended_at = $now;
+            $activeContract->save();
 
-            // Garantir que started_at é Carbon
-            $startedAt = $contract->started_at instanceof Carbon
-                ? $contract->started_at
-                : Carbon::parse($contract->started_at);
+            $startedAt = $activeContract->started_at instanceof Carbon
+                ? $activeContract->started_at
+                : Carbon::parse($activeContract->started_at);
 
-            // Cálculo de crédito
+            // Calculando dias usados no contrato ativo
             $daysUsed = $startedAt->diffInDays($now);
+
+            // Dias do mês do started_at (ex: se iniciou em Junho, será 30)
             $daysInMonth = $startedAt->daysInMonth;
 
+            // Debug: log de valores
+            Log::info("Contrato ativo iniciado em: {$startedAt}");
+            Log::info("Data atual: {$now}");
+            Log::info("Dias usados: {$daysUsed}");
+            Log::info("Dias no mês do contrato: {$daysInMonth}");
+
+            // Percentual do mês usado
             $usedPercent = $daysUsed / $daysInMonth;
-            $credit = $contract->plan->price * (1 - $usedPercent);
+
+            Log::info("Percentual do mês usado: {$usedPercent}");
+
+            // Crédito = preço plano antigo * percentual não usado
+            $credit = $activeContract->plan->price * (1 - $usedPercent);
+
+            Log::info("Crédito calculado: {$credit}");
         }
 
-        // Criar novo contrato
+        // Cria novo contrato ativo
         $newContract = Contract::create([
             'user_id' => $user->id,
             'plan_id' => $plan->id,
@@ -65,10 +80,16 @@ class ContractController extends Controller
             'started_at' => $now,
         ]);
 
-        // Criar pagamento com valor ajustado
+        // Valor a pagar no novo plano descontando o crédito
+        $amountToPay = max($plan->price - $credit, 0);
+
+        Log::info("Novo plano: {$plan->id} - Preço: {$plan->price}");
+        Log::info("Valor a pagar descontando crédito: {$amountToPay}");
+
+        // Cria pagamento para novo contrato
         Payment::create([
             'contract_id' => $newContract->id,
-            'amount' => max($plan->price - $credit, 0),
+            'amount' => $amountToPay,
             'paid' => true,
             'due_date' => $now->toDateString(),
         ]);
@@ -79,10 +100,11 @@ class ContractController extends Controller
         ]);
     }
 
+
     public function showActive()
     {
         $user = User::first();
-        $activeContract = $user->activeContract;
+        $activeContract = $user->getActiveContract();
 
         if (!$activeContract) {
             return response()->json(['message' => 'Nenhum contrato ativo.'], 404);
