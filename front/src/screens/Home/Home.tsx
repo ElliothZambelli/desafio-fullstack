@@ -6,11 +6,16 @@ import { useEffect } from 'react'
 import { UserInfo } from '../../components/UserInfo/UserInfo'
 import { useNavigate } from 'react-router-dom'
 import { CurrentPlanInfo } from '../../components/CurrentPlanInfo/CurrentPlanInfo'
-import type { Plan } from '../../types/plan'
+import type { Plan, Contract } from '../../types/plan'
 
 export function Home() {
   const { plans, loading } = usePlans()
-  const { contract, loading: contractLoading } = useActiveContract()
+
+  const {
+    contract,
+    loading: contractLoading,
+  }: { contract: Contract | null; loading: boolean } = useActiveContract()
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -28,8 +33,12 @@ export function Home() {
       return
     }
 
-    console.log('Redirecionando para página de pagamento com plano:', selectedPlan)
-    navigate('/payment', { state: { plan: selectedPlan } })
+    navigate('/payment', {
+      state: {
+        plan: selectedPlan,
+        credit_remaining: contract?.credit_remaining ?? 0,
+      },
+    })
   }
 
   return (
@@ -40,8 +49,8 @@ export function Home() {
       <div className={styles.cardArea}>
         <div className={styles.planGrid}>
           {plans.map((plan: Plan) => {
-            const isActive = Number(contract?.plan_id) === Number(plan.id)
-            console.log('plan.id:', plan.id, 'contract.plan_id:', contract?.plan_id, 'active:', isActive)
+            // Aqui usamos optional chaining para acessar plan_id com segurança
+            const isActive = contract?.plan_id === plan.id
 
             return (
               <PlanCard

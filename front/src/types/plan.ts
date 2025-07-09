@@ -3,7 +3,7 @@ export interface Plan {
   description: string
   numberOfClients: number
   gigabytesStorage: number
-  price: string
+  price: number  
   active: boolean
 }
 
@@ -13,8 +13,9 @@ export interface Contract {
   plan_id: number
   is_active: boolean
   started_at: string
-  ended_at: string | null
+  ended_at?: string | null  
   created_at: string
   updated_at: string
-  plan: Plan
+  credit_remaining?: number
+  plan?: Plan
 }

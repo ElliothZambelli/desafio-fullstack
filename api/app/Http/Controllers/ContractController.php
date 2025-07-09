@@ -40,7 +40,6 @@ class ContractController extends Controller
         $credit = 0;
 
         if ($activeContract) {
-            // Desativa contrato anterior
             $activeContract->is_active = false;
             $activeContract->ended_at = $now;
             $activeContract->save();
@@ -49,27 +48,12 @@ class ContractController extends Controller
                 ? $activeContract->started_at
                 : Carbon::parse($activeContract->started_at);
 
-            // Calculando dias usados no contrato ativo
             $daysUsed = $startedAt->diffInDays($now);
-
-            // Dias do mês do started_at (ex: se iniciou em Junho, será 30)
             $daysInMonth = $startedAt->daysInMonth;
 
-            // Debug: log de valores
-            Log::info("Contrato ativo iniciado em: {$startedAt}");
-            Log::info("Data atual: {$now}");
-            Log::info("Dias usados: {$daysUsed}");
-            Log::info("Dias no mês do contrato: {$daysInMonth}");
-
-            // Percentual do mês usado
             $usedPercent = $daysUsed / $daysInMonth;
 
-            Log::info("Percentual do mês usado: {$usedPercent}");
-
-            // Crédito = preço plano antigo * percentual não usado
             $credit = $activeContract->plan->price * (1 - $usedPercent);
-
-            Log::info("Crédito calculado: {$credit}");
         }
 
         // Cria novo contrato ativo
@@ -80,13 +64,16 @@ class ContractController extends Controller
             'started_at' => $now,
         ]);
 
-        // Valor a pagar no novo plano descontando o crédito
+        // Calcula valor a pagar descontando crédito
         $amountToPay = max($plan->price - $credit, 0);
 
-        Log::info("Novo plano: {$plan->id} - Preço: {$plan->price}");
-        Log::info("Valor a pagar descontando crédito: {$amountToPay}");
+        // Calcula crédito restante, se houver
+        $remainingCredit = 0;
+        if ($credit > $plan->price) {
+            $remainingCredit = $credit - $plan->price;
+        }
 
-        // Cria pagamento para novo contrato
+        // Cria pagamento inicial
         Payment::create([
             'contract_id' => $newContract->id,
             'amount' => $amountToPay,
@@ -94,9 +81,21 @@ class ContractController extends Controller
             'due_date' => $now->toDateString(),
         ]);
 
+        if ($remainingCredit > 0) {
+            Payment::create([
+                'contract_id' => $newContract->id,
+                'amount' => 0,
+                'paid' => false,
+                'credit_remaining' => $remainingCredit,
+                'due_date' => $now->addMonth()->toDateString(),
+            ]);
+        }
+
         return response()->json([
             'message' => 'Plano contratado com sucesso!',
             'contract' => $newContract,
+            'amount_to_pay' => $amountToPay,
+            'remaining_credit' => $remainingCredit,
         ]);
     }
 
@@ -111,5 +110,37 @@ class ContractController extends Controller
         }
 
         return response()->json($activeContract->load('plan'));
+    }
+
+    public function calculateCredit(Request $request)
+    {
+        $request->validate(['plan_id' => 'required|exists:plans,id']);
+
+        $user = User::first();
+        $plan = Plan::findOrFail($request->plan_id);
+        $now = Carbon::now();
+
+        $activeContract = $user->activeContract;
+        $credit = 0;
+
+        if ($activeContract) {
+            $startedAt = $activeContract->started_at instanceof Carbon
+                ? $activeContract->started_at
+                : Carbon::parse($activeContract->started_at);
+
+            $daysUsed = $startedAt->diffInDays($now);
+            $daysInMonth = $startedAt->daysInMonth;
+            $usedPercent = $daysUsed / $daysInMonth;
+
+            $credit = $activeContract->plan->price * (1 - $usedPercent);
+        }
+
+        $amountToPay = max($plan->price - $credit, 0);
+
+        return response()->json([
+            'original_price' => round($plan->price, 2),
+            'credit_applied' => round($credit, 2),
+            'final_price' => round($amountToPay, 2),
+        ]);
     }
 }

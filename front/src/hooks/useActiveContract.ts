@@ -1,23 +1,27 @@
-import { useEffect, useState } from 'react'
-import { getActiveContract } from './useContracts'
-import type { Contract } from '../types/plan' 
+import { useState, useEffect } from 'react'
+
+interface Contract {
+  id: number
+  user_id: number
+  plan_id: number
+  is_active: boolean
+  started_at: string
+  ended_at?: string | null
+  created_at: string
+  updated_at: string
+  credit_remaining?: number 
+}
 
 export function useActiveContract() {
   const [contract, setContract] = useState<Contract | null>(null)
   const [loading, setLoading] = useState(true)
 
   async function fetchContract() {
-    try {
-      setLoading(true)
-      const active = await getActiveContract()
-      console.log('Contrato buscado no hook useActiveContract:', active) 
-      setContract(active)
-    } catch (error) {
-      console.error('Erro no fetchContract do hook useActiveContract:', error)
-      setContract(null)
-    } finally {
-      setLoading(false)
-    }
+    setLoading(true)
+    const response = await fetch('/api/contracts/active')
+    const data = await response.json()
+    setContract(data)  // Certifique-se que data.plan está presente
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -26,3 +30,4 @@ export function useActiveContract() {
 
   return { contract, loading, refresh: fetchContract }
 }
+
