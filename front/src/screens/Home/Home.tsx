@@ -42,28 +42,39 @@ export function Home() {
   }
 
   return (
-    <div className={styles.pageWrapper}>
-      <button onClick={() => navigate('/history')}>Ver Histórico</button>
+  <div className={styles.pageWrapper}>
+    {/* TOPO DA TELA */}
+    <div className="w-full max-w-6xl flex flex-col gap-6">
+      <div className="flex justify-between items-center flex-wrap gap-4">
+        <UserInfo />
+        <button
+          onClick={() => navigate('/history')}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow"
+        >
+          Ver Histórico
+        </button>
+      </div>
 
-      <UserInfo />
       <CurrentPlanInfo />
+    </div>
 
-      <div className={styles.cardArea}>
-        <div className={styles.planGrid}>
-          {plans.map((plan: Plan) => {
-            const isActive = contract?.plan_id === plan.id
-
-            return (
-              <PlanCard
-                key={plan.id}
-                plan={plan}
-                onSubscribe={handleSubscribe}
-                active={isActive}
-              />
-            )
-          })}
-        </div>
+    {/* ÁREA DE PLANOS */}
+    <div className={styles.cardArea}>
+      <div className={styles.planGrid}>
+        {plans.map((plan: Plan) => {
+          const isActive = contract?.plan_id === plan.id
+          return (
+            <PlanCard
+              key={plan.id}
+              plan={plan}
+              onSubscribe={handleSubscribe}
+              active={isActive}
+            />
+          )
+        })}
       </div>
     </div>
-  )
+  </div>
+)
+
 }

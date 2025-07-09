@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import type { Plan } from '../types/plan' 
 
 interface Contract {
   id: number
@@ -10,6 +11,7 @@ interface Contract {
   created_at: string
   updated_at: string
   credit_remaining?: number 
+  plan?: Plan
 }
 
 export function useActiveContract() {
@@ -20,7 +22,7 @@ export function useActiveContract() {
     setLoading(true)
     const response = await fetch('/api/contracts/active')
     const data = await response.json()
-    setContract(data)  // Certifique-se que data.plan está presente
+    setContract(data)  
     setLoading(false)
   }
 

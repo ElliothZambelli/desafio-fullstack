@@ -1,6 +1,14 @@
 .card {
-  @apply bg-white rounded-2xl shadow-md border border-gray-200 flex flex-col justify-between hover:ring-2 hover:ring-blue-500 transition-all duration-300;
-  padding: 0; 
+  @apply bg-white shadow-md border border-gray-200 flex flex-col justify-between transition-transform duration-300 mx-2.5;
+  padding: 0;
+  max-width: 80%;  
+  width: 100%;       
+  margin: auto; 
+  border-radius: 9px;
+}
+
+.card:hover {
+  transform: scale(1.03);
 }
 
 .header {
@@ -27,7 +35,7 @@
 }
 
 .priceLabel {
-  font-size: large;
+  font-size: medium;
   font-weight: bold;
   color: #545151;
   padding-left: 5%;
@@ -47,7 +55,7 @@
 }
 
 .perMonth {
-  font-size: 0.875rem; 
+  font-size: large; 
   font-weight: 400;
   color: #545151;
   margin-left: 0.25rem;
@@ -63,5 +71,26 @@
 }
 
 .price {
-  @apply text-2xl font-extrabold text-blue-600 mt-4 mb-6;
+  @apply text-4xl font-extrabold mt-4 mb-6;
+   color: #515151; 
 }
+
+.storageBlock {
+  @apply mt-4 mb-6;
+}
+
+.storageContainer {
+  padding-left: 5%;
+}
+
+.storage {
+  @apply text-2xl font-bold text-[#515151];
+}
+
+.storageLabel {
+  font-size: large;
+  font-weight: 500;
+  color: #798286;
+  padding-left: 5%;
+}
+

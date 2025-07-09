@@ -8,9 +8,9 @@ export function UserInfo() {
   if (!user) return <p>Usuário não encontrado</p>
 
   return (
-    <div>
-      <h2>Bem-vindo, {user.name}!</h2>
-      <p>Email: {user.email}</p>
+    <div className="flex flex-col">
+      <p className="text-xl font-semibold text-gray-800">{user.name}</p>
+      <p className="text-sm text-gray-600">{user.email}</p>
     </div>
   )
 }

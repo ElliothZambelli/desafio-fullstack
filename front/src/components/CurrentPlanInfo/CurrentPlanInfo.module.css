@@ -1,23 +1,19 @@
 .container {
-  border: 1px solid #ccc;
-  padding: 16px;
-  margin-bottom: 24px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  @apply w-full bg-white p-6 rounded-xl shadow-md;
 }
 
 .title {
-  font-size: 20px;
-  margin-bottom: 8px;
+  @apply text-lg font-semibold text-blue-600 mb-2 uppercase tracking-wide;
 }
 
-.description {
-  font-weight: bold;
-  margin-bottom: 8px;
+.planHighlight {
+  @apply bg-blue-50 border border-blue-200 p-4 rounded-md mb-4;
 }
 
-.loading,
-.noPlan {
-  font-style: italic;
-  color: #666;
+.planDescription {
+  @apply text-xl font-bold text-gray-800;
+}
+
+.details p {
+  @apply text-sm text-gray-700 mb-1;
 }

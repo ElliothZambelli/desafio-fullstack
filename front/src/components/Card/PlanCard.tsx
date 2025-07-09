@@ -10,8 +10,18 @@ interface PlanCardProps {
 export function PlanCard({ plan, onSubscribe, active = false }: PlanCardProps) {
   const main = plan.description.split('/')[0].trim()
 
+  const handleClick = () => {
+    if (!active) {
+      onSubscribe(plan.id)
+    }
+  }
+
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      onClick={handleClick}
+      style={{ cursor: active ? 'default' : 'pointer' }}
+    >
       <div className={styles.header}>
         <h2 className={styles.title}>
           {main}
@@ -21,6 +31,7 @@ export function PlanCard({ plan, onSubscribe, active = false }: PlanCardProps) {
           </span>
         </h2>
       </div>
+
       <div className={styles.priceBlock}>
         <p className={styles.priceLabel}>Preço:</p>
         <div className={styles.priceContainer}>
@@ -30,14 +41,13 @@ export function PlanCard({ plan, onSubscribe, active = false }: PlanCardProps) {
           <span className={styles.perMonth}>/mês</span>
         </div>
       </div>
-      <button
-          className={styles.button}
-          onClick={() => onSubscribe(plan.id)}
-          disabled={active}
-        >
-          {active ? 'Plano Ativo' : 'Assinar'}
-        </button>
-      
+
+      <div className={styles.storageBlock}>
+        <p className={styles.priceLabel}>Armazenamento:</p>
+        <div className={styles.storageContainer}>
+          <span className={styles.storage}>{plan.gigabytesStorage} GB</span>
+        </div>
+      </div>
     </div>
   )
 }
