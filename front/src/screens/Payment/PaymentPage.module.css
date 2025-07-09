@@ -1,25 +1,35 @@
-.pixCodeLabel {
-  font-weight: bold;
-  margin-top: 20px;
+.paymentContainer {
+  @apply flex flex-col items-center justify-center bg-slate-50 px-4 py-6; 
+  max-width: 480px;
+  margin: 2rem auto; 
+  text-align: center;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  padding: 2rem;
 }
 
-.pixCode {
-  display: block;
-  background-color: #f4f4f4;
-  padding: 10px;
-  margin: 10px 0;
+.paymentContainer > h1 {
+  @apply text-3xl font-bold text-gray-800 mb-6;
+}
+
+.paymentContainer > p {
+  @apply text-gray-700 text-lg mb-2;
+}
+
+.qrCodeContainer {
+  @apply my-8 flex flex-col items-center;
+}
+
+
+.barcode {
+  @apply text-xs break-all text-gray-500 mt-4 select-text;
   font-family: monospace;
-  word-break: break-all;
 }
 
-.copyButton {
-  margin-bottom: 20px;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.divider {
-  margin: 30px 0;
+.payButton {
+  @apply bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition;
+  width: 100%;
+  max-width: 300px;
+  font-size: 1.125rem;
 }

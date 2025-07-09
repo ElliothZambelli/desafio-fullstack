@@ -35,13 +35,18 @@ export function PaymentPage() {
     navigate('/')
   }
 
-  // Código PIX fictício para QR e código de barras
-  const pixCode = `00020126580014br.gov.bcb.pix0114+55619999999990214Pagamento para plano ${plan.description}520400005303986540${(amountToPay*100).toFixed(0).padStart(6, '0')}5802BR5925Nome da Empresa6009Cidade62070503***6304ABCD`
+  const pixCode = `00020126580014br.gov.bcb.pix0114+556199999999902145204000053039865405802BR59256304ABCD`
 
   return (
     <div className={styles.paymentContainer}>
       <h1>Pagamento via Pix</h1>
-      <p><strong>Plano:</strong> {plan.description}</p>
+      <p className={styles.planDescription}>
+        {plan.description.split('/')[0].trim()}
+        <br />
+        <span className={styles.planClients}>
+          / {plan.numberOfClients} cliente{plan.numberOfClients > 1 ? 's' : ''}
+        </span>
+      </p>
       <p><strong>Preço original:</strong> R$ {formatCurrency(Number(plan.price))}</p>
       <p><strong>Crédito aplicado:</strong> R$ {formatCurrency(creditApplied)}</p>
       <p><strong>Valor final a pagar:</strong> R$ {formatCurrency(amountToPay)}</p>
