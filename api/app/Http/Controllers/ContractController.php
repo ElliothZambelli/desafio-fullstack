@@ -143,4 +143,28 @@ class ContractController extends Controller
             'final_price' => round($amountToPay, 2),
         ]);
     }
+
+    public function history()
+    {
+        $user = User::first();
+
+        $contracts = Contract::with(['plan', 'payments'])
+            ->where('user_id', $user->id)
+            ->orderBy('started_at', 'desc')
+            ->get();
+
+        $history = $contracts->map(function ($contract) {
+            $payment = $contract->payments->first();
+
+            return [
+                'plan' => $contract->plan->description,
+                'price' => (float) $contract->plan->price,
+                'credit_applied' => $payment ? (float) ($contract->plan->price - $payment->amount) : 0,
+                'amount_paid' => $payment ? (float) $payment->amount : 0,
+                'paid_at' => $payment ? $payment->created_at->format('Y-m-d') : 'N/A',
+            ];
+        });
+
+        return response()->json($history);
+    }
 }

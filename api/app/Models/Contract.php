@@ -37,4 +37,9 @@ class Contract extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
 }

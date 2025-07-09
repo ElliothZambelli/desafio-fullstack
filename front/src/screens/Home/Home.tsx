@@ -43,13 +43,14 @@ export function Home() {
 
   return (
     <div className={styles.pageWrapper}>
+      <button onClick={() => navigate('/history')}>Ver Histórico</button>
+
       <UserInfo />
       <CurrentPlanInfo />
 
       <div className={styles.cardArea}>
         <div className={styles.planGrid}>
           {plans.map((plan: Plan) => {
-            // Aqui usamos optional chaining para acessar plan_id com segurança
             const isActive = contract?.plan_id === plan.id
 
             return (

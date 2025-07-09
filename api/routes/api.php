@@ -39,6 +39,9 @@ Route::get('/payments', [PaymentController::class, 'index']);
 Route::post('/payments', [PaymentController::class, 'store']);
 Route::post('/contracts/calculate-credit', [ContractController::class, 'calculateCredit']);
 
+//Histórico
+Route::get('/contracts/history', [ContractController::class, 'history']);
+
 
 
 
