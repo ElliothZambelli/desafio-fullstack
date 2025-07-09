@@ -11,13 +11,6 @@ export function PaymentPage() {
     return <p>Plano não encontrado.</p>
   }
 
-  function formatClientText(numberOfClients: number) {
-    return `${numberOfClients} cliente${numberOfClients > 1 ? 's' : ''}`
-  }
-
-  const mainDescription = plan.description.split('/')[0].trim()
-  const clientText = formatClientText(plan.numberOfClients)
-
   async function handlePixPayment() {
     await createContract(plan.id)
     alert('Pagamento realizado com sucesso!')
@@ -27,16 +20,24 @@ export function PaymentPage() {
   return (
     <div className={styles.paymentContainer}>
       <h1>Pagamento via Pix</h1>
+
       <p>
-        Você está contratando o plano: <strong>{mainDescription} / {clientText}</strong>
+        Você está contratando o plano: <strong>{plan.description}</strong>
       </p>
       <p>
         Valor: <strong>R$ {Number(plan.price).toFixed(2).replace('.', ',')}</strong>
       </p>
 
       <div className={styles.fakeQrCode}>
-        <p>[ QR Code gerado ]</p>
+        <img
+          src={`https://api.qrserver.com/v1/create-qr-code/?data=Plano%20${plan.id}%20-%20R$${plan.price}&size=200x200`}
+          alt="QR Code Pix Simulado"
+        />
       </div>
+
+      <p style={{ fontFamily: 'monospace', marginTop: '1rem' }}>
+        23790.12345 60000.123456 78901.123456 1 90000000000000
+      </p>
 
       <button onClick={handlePixPayment} className={styles.payButton}>
         Pagar com Pix

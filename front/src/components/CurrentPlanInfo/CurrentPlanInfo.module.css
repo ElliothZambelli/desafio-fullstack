@@ -1,0 +1,23 @@
+.container {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.description {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.loading,
+.noPlan {
+  font-style: italic;
+  color: #666;
+}

@@ -1,5 +1,4 @@
-import React from 'react'
-import { useUser } from '../hooks/useUser'
+import { useUser } from '../../hooks/useUser'
 
 export function UserInfo() {
   const { user, loading, error } = useUser()

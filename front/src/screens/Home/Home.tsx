@@ -3,8 +3,10 @@ import { PlanCard } from '../../components/Card/PlanCard'
 import styles from './Home.module.css'
 import { useActiveContract } from '../../hooks/useActiveContract'
 import { useEffect } from 'react'
-import { UserInfo } from '../../components/UserInfo'
+import { UserInfo } from '../../components/UserInfo/UserInfo'
 import { useNavigate } from 'react-router-dom'
+import { CurrentPlanInfo } from '../../components/CurrentPlanInfo/CurrentPlanInfo'
+import type { Plan } from '../../types/plan'
 
 export function Home() {
   const { plans, loading } = usePlans()
@@ -20,7 +22,7 @@ export function Home() {
   }
 
   function handleSubscribe(planId: number) {
-    const selectedPlan = plans.find(p => p.id === planId)
+    const selectedPlan = plans.find((p: Plan) => p.id === planId)
     if (!selectedPlan) {
       alert('Plano não encontrado.')
       return
@@ -33,10 +35,11 @@ export function Home() {
   return (
     <div className={styles.pageWrapper}>
       <UserInfo />
+      <CurrentPlanInfo />
 
       <div className={styles.cardArea}>
         <div className={styles.planGrid}>
-          {plans.map(plan => {
+          {plans.map((plan: Plan) => {
             const isActive = Number(contract?.plan_id) === Number(plan.id)
             console.log('plan.id:', plan.id, 'contract.plan_id:', contract?.plan_id, 'active:', isActive)
 

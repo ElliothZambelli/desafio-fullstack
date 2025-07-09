@@ -1,16 +1,25 @@
-.pageWrapper {
-  padding: 2rem;
+.pixCodeLabel {
+  font-weight: bold;
+  margin-top: 20px;
 }
 
-.title {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+.pixCode {
+  display: block;
+  background-color: #f4f4f4;
+  padding: 10px;
+  margin: 10px 0;
+  font-family: monospace;
+  word-break: break-all;
 }
 
-.paymentInfo {
-  font-size: 1.2rem;
-  background-color: #f3f3f3;
-  padding: 1rem;
-  border-radius: 8px;
+.copyButton {
+  margin-bottom: 20px;
+  background-color: #eee;
   border: 1px solid #ccc;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.divider {
+  margin: 30px 0;
 }
