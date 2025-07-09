@@ -1,5 +1,5 @@
 import { Plan } from '../../types/plan'
-import styles from './PlanCard.module.css'
+import styles from '../../styles/PlanCard.module.css'
 
 interface PlanCardProps {
   plan: Plan

@@ -1,5 +1,5 @@
 import { useActiveContract } from '../../hooks/useActiveContract'
-import styles from './CurrentPlanInfo.module.css'
+import styles from '../../styles/CurrentPlanInfo.module.css'
 
 export function CurrentPlanInfo() {
   const { contract, loading } = useActiveContract()

@@ -1,6 +1,6 @@
 import { usePlans } from '../../hooks/usePlans'
 import { PlanCard } from '../../components/Card/PlanCard'
-import styles from './Home.module.css'
+import styles from '../../styles/Home.module.css'
 import { useActiveContract } from '../../hooks/useActiveContract'
 import { useEffect } from 'react'
 import { UserInfo } from '../../components/UserInfo/UserInfo'

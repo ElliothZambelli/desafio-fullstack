@@ -1,7 +1,0 @@
-.name {
-  @apply text-xl font-semibold text-gray-800;
-}
-
-.email {
-  @apply text-sm text-gray-600;
-}

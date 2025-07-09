@@ -2,7 +2,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { createContract } from '../../hooks/useContracts'
 import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
-import styles from './PaymentPage.module.css'
+import styles from '../../styles/PaymentPage.module.css'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export function PaymentPage() {
   const navigate = useNavigate()
@@ -29,10 +31,31 @@ export function PaymentPage() {
     return value.toFixed(2).replace('.', ',')
   }
 
+  function CustomToast({ closeToast }: { closeToast?: () => void }) {
+    return (
+      <div>
+        Pagamento realizado com sucesso!
+        <button
+          onClick={closeToast}
+          className="ml-4 px-3 py-1 bg-blue-600 text-white rounded"
+        >
+          OK
+        </button>
+      </div>
+    )
+  }
   async function handlePixPayment() {
     await createContract(plan.id)
-    alert('Pagamento realizado com sucesso!')
-    navigate('/')
+    toast.success(<CustomToast />, {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      onClose: () => navigate('/'),
+      className: styles.customToast,  
+    })
+
   }
 
   const pixCode = `00020126580014br.gov.bcb.pix0114+556199999999902145204000053039865405802BR59256304ABCD`
@@ -63,6 +86,8 @@ export function PaymentPage() {
       >
         {amountToPay <= 0 ? 'Crédito suficiente - Plano ativado' : 'Pagar com Pix'}
       </button>
+
+      <ToastContainer />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useContractHistory } from '../../hooks/useContractHistory'
-import styles from './HistoryPage.module.css'
+import styles from '../../styles/HistoryPage.module.css'
 
 export function HistoryPage() {
   const { history, loading } = useContractHistory()
