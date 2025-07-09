@@ -1,0 +1,40 @@
+.historyWrapper {
+  @apply max-w-6xl mx-auto px-4 py-10 bg-white shadow-md rounded-2xl text-center;
+}
+
+h1 {
+  @apply text-2xl font-bold text-gray-800 mb-6;
+}
+
+/* Tabela base */
+.table {
+  @apply w-full text-left text-sm text-gray-700 border-collapse;
+}
+
+/* Cabeçalho */
+.table thead tr {
+  @apply bg-gray-100;
+}
+
+.table thead th {
+  @apply px-4 py-3 font-semibold text-gray-700 border-b border-gray-200;
+}
+
+/* Corpo da tabela */
+.table tbody td {
+  @apply px-4 py-3 border-b border-gray-100;
+}
+
+/* Linhas alternadas */
+.table tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
